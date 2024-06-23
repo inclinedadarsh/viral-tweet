@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral Tweet Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #000000;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        #output {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #1da1f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0c85d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Viral Tweet Generator</h1>
+        <div id="output">Your viral tweet will appear here...</div>
+        <button onclick="generateTweet()">Generate</button>
+    </div>
+
+    <script>
+        const words = ['Numpy', 'from', 'scratch', 'in', 'C'];
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function getRandomChar() {
+            return characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+
+        async function revealAnimation(finalText) {
+            const output = document.getElementById('output');
+            const length = finalText.length;
+            const totalDuration = 1250; // 1.25 seconds for the animation
+            const iterationsPerChar = 3;
+            const durationPerChar = totalDuration / length / iterationsPerChar;
+
+            for (let i = 0; i < length; i++) {
+                for (let j = 0; j < iterationsPerChar; j++) {
+                    let currentText = finalText.substr(0, i);
+                    for (let k = i; k < length; k++) {
+                        currentText += getRandomChar();
+                    }
+                    output.textContent = currentText;
+                    await new Promise(resolve => setTimeout(resolve, durationPerChar));
+                }
+            }
+
+            output.textContent = finalText;
+        }
+
+        function generateTweet() {
+            const shuffledWords = shuffleArray([...words]);
+            const tweet = shuffledWords.join(' ');
+            revealAnimation(tweet);
+        }
+    </script>
+</body>
+</html>
